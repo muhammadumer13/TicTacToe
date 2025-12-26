@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            justify-content: center;
+            align-content: center;
+            height: 400px;
+            gap: 20px;
+        }
+
+        .box {
+            width: 100px;
+            height: 100px;
+            font-size: 50px;
+        }
+
+        .btns {
+            width: 300px;
+            height: 100px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="btns">
+            <button id="reset" onclick="resetGame()">Reset Game</button>
+            <button id="new" onclick="resetGame()">New Game</button>
+
+        </div>
+
+        <div>
+            <h1 id="message"></h1>
+        </div>
+
+        <div class="grid">
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+        </div>
+    </div>
+
+
+    <script>
+        let boxes = document.querySelectorAll('.box')
+        let turnO = true
+        let message = document.getElementById('message')
+        const winpatterns = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ]
+
+        boxes.forEach(box => {
+            box.addEventListener("click", () => {
+                if (turnO == true) {
+                    box.innerText = 'O'
+                    turnO = false
+                }
+                else {
+                    box.innerText = 'X'
+                    turnO = true
+                }
+                box.disabled = true
+                checkwinner()
+            })
+        })
+
+        function checkwinner() {
+            for (pattern of winpatterns) {
+                let pos1 = boxes[pattern[0]].innerText
+                let pos2 = boxes[pattern[1]].innerText
+                let pos3 = boxes[pattern[2]].innerText
+
+                if (pos1 != '' && pos2 != '' && pos3 != '') {
+                    if (pos1 == pos2 && pos2 == pos3) {
+                        
+                        message.innerText = `Winner is ${pos1}`
+                        disableBoxes()
+                    }
+                }
+            }
+        }
+
+        function disableBoxes() {
+            boxes.forEach(box => {
+                box.disabled = true
+            })
+        }
+
+        function resetGame() {
+            boxes.forEach(box => {
+                box.disabled = false
+                box.innerText = " "
+                turnO = true
+            })
+        }
+
+    </script>
+</body>
+
+</html>
